@@ -21,12 +21,12 @@ def lint(session: nox.Session):
 
 @NOX_SESSION
 def typecheck(session: nox.Session):
-    session.run("mypy", "toml_sort")
+    session.run("mypy", "-p", "pyproject_format")
 
 
 @NOX_SESSION
 def tests(session: nox.Session):
-    session.run("pytest", "tests")
+    session.run("pytest", "tests", *session.posargs)
 
 
 @NOX_SESSION
@@ -34,7 +34,7 @@ def coverage(session: nox.Session):
     session.run(
         "pytest",
         "--cov",
-        "toml_sort",
+        "pyproject_format",
         "--cov-report",
         "term-missing",
         "tests",

@@ -8,16 +8,19 @@ strict = true
 enable_error_code = "ignore-without-code,redundant-expr,truthy-bool"
 
 [tool.poetry]
-name = "toml-sort"
-version = "0.24.3"
-description = "Toml sorting library"
-authors = ["Sam Roeca <samuel.roeca@gmail.com>"]
+name = "pyproject-format"
+version = "0.0.1"
+description = "Pyproject formatter"
+authors = [
+  "Onerandomusername <me@arielle.codes>",
+  "Sam Roeca <samuel.roeca@gmail.com>"
+]
 readme = "README.md"
-homepage = "https://github.com/pappasam/toml-sort"
-repository = "https://github.com/pappasam/toml-sort"
+homepage = "https://github.com/onerandomusername/pyproject-format"
+repository = "https://github.com/onerandomusername/pyproject-format"
 keywords = ["toml", "sort", "cli", "unix", "utility"]
 classifiers = [
-  "Development Status :: 4 - Beta",
+  "Development Status :: 2 - Pre-Alpha",
   "Environment :: Console",
   "Topic :: Software Development :: Code Generators",
   "Topic :: Utilities",
@@ -38,7 +41,7 @@ pytest-cov = "*"
 ruff = "*"
 
 [tool.poetry.scripts]
-toml-sort = 'toml_sort.cli:cli'
+pyproject-format = 'pyproject_format.cli:cli'
 
 [tool.ruff.lint]
 select = [

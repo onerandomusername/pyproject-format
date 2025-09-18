@@ -11,9 +11,9 @@ from unittest import mock
 
 import pytest
 
-from toml_sort import cli
-from toml_sort.cli import parse_sort_first
-from toml_sort.tomlsort import SortOverrideConfiguration
+from pyproject_format import cli
+from pyproject_format.cli import parse_sort_first
+from pyproject_format.tomlsort import SortOverrideConfiguration
 
 PATH_EXAMPLES = "tests/examples"
 
@@ -75,13 +75,13 @@ def test_cli_defaults(
     """
     with get_fixture(path_sorted).open(encoding="UTF-8") as infile:
         expected = infile.read()
-    result_filepath = capture(["toml-sort", str(get_fixture(path_unsorted))])
+    result_filepath = capture(["pyproject-format", str(get_fixture(path_unsorted))])
     assert result_filepath.returncode == 0
     assert result_filepath.stdout == expected
 
     with get_fixture(path_unsorted).open(encoding="UTF-8") as infile:
         original = infile.read()
-    result_stdin = capture(["toml-sort"], stdin=original)
+    result_stdin = capture(["pyproject-format"], stdin=original)
     assert result_stdin.returncode == 0
     assert result_stdin.stdout == expected
 
@@ -159,7 +159,7 @@ def test_cli_args(
     """Test the basic cli behavior with different arguments."""
     with get_fixture(path_sorted).open(encoding="UTF-8") as infile:
         expected = infile.read()
-    result_filepath = capture(["toml-sort"] + args + [str(get_fixture(path_unsorted))])
+    result_filepath = capture(["pyproject-format"] + args + [str(get_fixture(path_unsorted))])
     assert result_filepath.returncode == 0
     assert result_filepath.stdout == expected
 
@@ -190,7 +190,7 @@ def test_cli_args(
 def test_multiple_files_check(paths, expected_exit_code):
     """Unsorted files should be checked."""
     paths_unsorted = [os.path.join(PATH_EXAMPLES, path) for path in paths]
-    result = capture(["toml-sort", "--check"] + paths_unsorted)
+    result = capture(["pyproject-format", "--check"] + paths_unsorted)
     assert result.returncode == expected_exit_code, result.stderr
 
 
@@ -212,7 +212,7 @@ def test_multiple_files_in_place(tmpdir):
         shutil.copy(orig_path, temp_path)
         temp_paths_unsorted.append(str(temp_path))
 
-    result = capture(["toml-sort", "--in-place"] + temp_paths_unsorted)
+    result = capture(["pyproject-format", "--in-place"] + temp_paths_unsorted)
     assert result.returncode == 0, result.stderr
 
     for path_unsorted, path_sorted in zip(temp_paths_unsorted, paths_sorted):
@@ -246,13 +246,13 @@ def test_multiple_files_and_errors(options):
         os.path.join(PATH_EXAMPLES, "from-toml-lang.toml"),
         os.path.join(PATH_EXAMPLES, "weird.toml"),
     ]
-    result = capture(["toml-sort"] + options + paths)
+    result = capture(["pyproject-format"] + options + paths)
     assert result.returncode == 1, result.stdout
 
 
 def test_load_config_file_read():
     """Test no error if pyproject.toml cannot be read."""
-    with mock.patch("toml_sort.cli.open", side_effect=OSError):
+    with mock.patch("pyproject_format.cli.open", side_effect=OSError):
         section = cli.load_pyproject()
         assert not cli.parse_config(section)
 
@@ -283,7 +283,7 @@ def test_load_config_file_read():
 def test_load_config_file(toml, expected):
     """Test load_config_file."""
     open_mock = mock.mock_open(read_data=toml)
-    with mock.patch("toml_sort.cli.open", open_mock):
+    with mock.patch("pyproject_format.cli.open", open_mock):
         section = cli.load_pyproject()
         assert cli.parse_config(section) == expected
 
@@ -294,7 +294,7 @@ def test_load_config_file(toml, expected):
 def test_load_config_file_invalid(toml):
     """Test error if pyproject.toml is not valid."""
     open_mock = mock.mock_open(read_data=toml)
-    with mock.patch("toml_sort.cli.open", open_mock):
+    with mock.patch("pyproject_format.cli.open", open_mock):
         with pytest.raises(SystemExit):
             section = cli.load_pyproject()
             cli.parse_config(section)
@@ -352,7 +352,7 @@ def test_load_config_file_invalid(toml):
 def test_load_config_overrides(toml, expected):
     """Turn settings tomldocument into SortOverrideConfiguration."""
     open_mock = mock.mock_open(read_data=toml)
-    with mock.patch("toml_sort.cli.open", open_mock):
+    with mock.patch("pyproject_format.cli.open", open_mock):
         section = cli.load_pyproject()
         assert isinstance(section, dict)
         parsed = cli.parse_config_overrides(section)
@@ -384,7 +384,7 @@ def test_load_config_overrides(toml, expected):
 def test_load_config_overrides_fail(toml):
     """parse_config_overrides exits if config contains unexpected key."""
     open_mock = mock.mock_open(read_data=toml)
-    with mock.patch("toml_sort.cli.open", open_mock):
+    with mock.patch("pyproject_format.cli.open", open_mock):
         with pytest.raises(SystemExit):
             section = cli.load_pyproject()
             cli.parse_config_overrides(section)

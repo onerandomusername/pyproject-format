@@ -1,4 +1,4 @@
-"""Test the toml_sort module."""
+"""Test the pyproject_format module."""
 
 from __future__ import annotations
 
@@ -7,8 +7,8 @@ from typing import Any, Callable, Dict, List
 
 import pytest
 
-from toml_sort import TomlSort
-from toml_sort.tomlsort import (
+from pyproject_format import TomlSort
+from pyproject_format.tomlsort import (
     CommentConfiguration,
     FormattingConfiguration,
     SortConfiguration,
@@ -172,9 +172,9 @@ def test_tomlsort(
     path_sorted = get_fixture(["sorted", sorted_fixture])
 
     toml_unsorted_fixture = path_unsorted.read_text()
-    toml_sorted_fixture = path_sorted.read_text()
+    pyproject_formated_fixture = path_sorted.read_text()
 
     sort_output = TomlSort(toml_unsorted_fixture, **args).sorted()
 
-    assert sort_output == toml_sorted_fixture
+    assert sort_output == pyproject_formated_fixture
     assert TomlSort(sort_output, **args).sorted() == sort_output

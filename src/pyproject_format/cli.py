@@ -27,7 +27,7 @@ def get_version() -> str:
     """Get the program version."""
     from importlib.metadata import version
 
-    return version("toml-sort")
+    return version("pyproject-format")
 
 
 def printerr(arg: str) -> None:
@@ -78,7 +78,7 @@ def load_pyproject() -> TOMLDocument:
 
 
 def parse_config(tomlsort_section: TOMLDocument) -> Dict[str, Any]:
-    """Load the toml_sort configuration from a TOMLDocument."""
+    """Load the pyproject_format configuration from a TOMLDocument."""
     config = dict(tomlsort_section)
 
     # remove the overrides key, since it is parsed separately
@@ -165,16 +165,16 @@ def parse_sort_first(
 def get_parser(defaults: Dict[str, Any]) -> ArgumentParser:
     """Get the argument parser."""
     parser = ArgumentParser(
-        prog="toml-sort",
+        prog="pyproject-format",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description="Toml sort: a sorting utility for toml files.",
         epilog="""\
 Examples:
 
-  - **Stdin -> Stdout**: cat input.toml | toml-sort
-  - **Disk -> Disk**: toml-sort -o output.toml input.toml
-  - **Linting**: toml-sort --check input.toml input2.toml input3.toml
-  - **Inplace Disk**: toml-sort --in-place input.toml input2.toml
+  - **Stdin -> Stdout**: cat input.toml | pyproject-format
+  - **Disk -> Disk**: pyproject-format -o output.toml input.toml
+  - **Linting**: pyproject-format --check input.toml input2.toml input3.toml
+  - **Inplace Disk**: pyproject-format --in-place input.toml input2.toml
 
 Return codes:
 
@@ -322,7 +322,7 @@ Notes:
     parser.add_argument(
         "filenames",
         metavar="F",
-        help=(f"filename(s) to be processed by toml-sort (default: {STD_STREAM})"),
+        help=(f"filename(s) to be processed by pyproject-format (default: {STD_STREAM})"),
         type=str,
         nargs="*",
     )
@@ -408,7 +408,7 @@ def cli(  # pylint: disable=too-many-branches,too-many-locals
             write_file(output_clean, sorted_toml)
         else:
             printerr("Uncaught error. Please submit GitHub issue:")
-            printerr("<https://github.com/pappasam/toml-sort/issues>")
+            printerr("<https://github.com/pappasam/pyproject-format/issues>")
             sys.exit(1)
 
     if args.check and check_failures:

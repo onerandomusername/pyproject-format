@@ -9,7 +9,7 @@ version = "0.14.0"
 python = "^3.6"
 
 [tool.poetry.scripts]
-toml-sort = 'toml_sort.cli:cli'
+toml-sort = 'pyproject_format.cli:cli'
 
 [tool.tox]
 legacy_tox_ini = """
