@@ -410,3 +410,13 @@ def test_parse_sort_first(arg, expected_first, expected_overrides):
     first, overrides = parse_sort_first(arg, {})
     assert first == expected_first
     assert overrides == expected_overrides
+
+
+def test_missing_input_file_clean_error(capsys):
+    """Missing input file should exit 1 with a clean message, no traceback."""
+    with pytest.raises(SystemExit) as exc_info:
+        cli.cli(["does-not-exist-xyz.toml"])
+    assert exc_info.value.code == 1
+    captured = capsys.readouterr()
+    assert "does-not-exist-xyz.toml" in captured.err
+    assert "Traceback" not in captured.err
