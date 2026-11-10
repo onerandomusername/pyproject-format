@@ -372,7 +372,11 @@ def cli(  # pylint: disable=too-many-branches,too-many-locals
     check_failures = []
 
     for filename in filenames_clean:
-        original_toml = read_file(filename)
+        try:
+            original_toml = read_file(filename)
+        except OSError as exc:
+            printerr(f"Cannot read input file {filename!r}: {exc.strerror or exc}")
+            sys.exit(1)
         sorted_toml = TomlSort(
             input_toml=original_toml,
             comment_config=CommentConfiguration(
